@@ -10,7 +10,7 @@ from urllib.parse import quote # for URL encoding special characters
 # data_file_excel: the path to an Excel file containing contact information
 # message_file_text: the path to a text file containing the message to be sent
 # x_cord and y_cord: the coordinates of the mouse click to be performed (default values are set to the location of the send button in WhatsApp Web)
-def send_whatsapp(data_file_excel, message_file_text, x_cord=830, y_cord=954):
+def send_whatsapp(data_file_excel, message_file_text, x_cord=822, y_cord=979):
     # Reading the Excel file and assigning the contents to a DataFrame named df
     # Also specifying the "Contact" column as a string datatype to prevent Excel from automatically converting phone numbers to scientific notation
     df = pd.read_excel(data_file_excel, dtype={"Contact":str})
@@ -20,9 +20,9 @@ def send_whatsapp(data_file_excel, message_file_text, x_cord=830, y_cord=954):
     contact = df['Contact'].values
     
     # Reading the contents of the message file and assigning it to a variable named file_data
-    with open (message_file_text) as f:
+    with open(message_file_text, "r", encoding="utf-8") as f:
         file_data = f.read()
-    
+
     # Zipping together the values in name and contact into tuples and assigning them to a variable named zipped
     zipped = zip(name, contact)
     
@@ -36,9 +36,10 @@ def send_whatsapp(data_file_excel, message_file_text, x_cord=830, y_cord=954):
         
         # Opening the WhatsApp Web URL for the corresponding contact and message text
         web.open(f"https://web.whatsapp.com/send?phone={b}&text={quote(msg)}")
+        k.press_and_release('enter')
         
         # Adding a delay to allow the WhatsApp Web page to load
-        time.sleep(15)
+        time.sleep(25)
         
         # Simulating a mouse click at the specified coordinates to send the message
         pyautogui.click(x_cord, y_cord)
@@ -50,13 +51,14 @@ def send_whatsapp(data_file_excel, message_file_text, x_cord=830, y_cord=954):
         k.press_and_release('enter')
         
         # Adding a delay to allow time for the pop-up to be dismissed
-        time.sleep(2)
+        time.sleep(10)
         
         # Simulating the pressing of the "Ctrl + W" keys to close the WhatsApp Web tab
         k.press_and_release('ctrl+w')
         
+        
         # Adding a delay to allow time for the tab to be closed
-        time.sleep(1)
+        time.sleep(2)
         
         # Incrementing the counter variable and printing a message indicating that the message has been sent
         counter += 1
@@ -66,7 +68,7 @@ def send_whatsapp(data_file_excel, message_file_text, x_cord=830, y_cord=954):
     print("Done!")
 
 # Defining the paths to the Excel file and message text file to be used as inputs to the send_whatsapp function
-excel_path=r"D:\My Drive\Eff_Corp_YT_2.0\FILES CONTENT\Mar 23\VID 2010\0. Whatsapp Web Automation\Whatsapp List_Main.xlsx"
-text_path=r"D:\My Drive\Eff_Corp_YT_2.0\FILES CONTENT\Mar 23\VID 2010\0. Whatsapp Web Automation\WHATSDRAFT.txt"
+excel_path=r"Whatsapp List_Main.xlsx"
+text_path=r"WHATSDRAFT.txt"
 
 send_whatsapp(excel_path,text_path)
